@@ -1,15 +1,45 @@
 package com.xkyss.security;
 
+import cn.hutool.core.util.CharsetUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
+import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
+import org.bouncycastle.crypto.engines.SM2Engine;
+import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
+import org.bouncycastle.crypto.params.ECPublicKeyParameters;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.jce.spec.ECNamedCurveGenParameterSpec;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.security.PrivateKey;
-import java.security.PublicKey;
+import java.security.*;
+import java.security.interfaces.ECPrivateKey;
+import java.security.interfaces.ECPublicKey;
+import java.security.spec.ECPoint;
 import java.util.Base64;
+import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
+import org.bouncycastle.crypto.generators.ECKeyPairGenerator;
+import org.bouncycastle.crypto.params.ECDomainParameters;
+import org.bouncycastle.crypto.params.ECKeyGenerationParameters;
+import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
+import org.bouncycastle.crypto.params.ECPublicKeyParameters;
+import org.bouncycastle.crypto.util.SubjectPublicKeyInfoFactory;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.jce.spec.ECNamedCurveGenParameterSpec;
+import org.bouncycastle.jce.spec.ECNamedCurveSpec;
+
+import java.math.BigInteger;
+import java.security.*;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
+
+import static cn.hutool.crypto.KeyUtil.generateKeyPair;
 
 public class RsaTest {
     @Test
@@ -29,5 +59,30 @@ public class RsaTest {
         RSA rsa = SecureUtil.rsa(privateKeyString, publicKeyString);
         RsaUtil.writePem(rsa.getPublicKey(), "target/publicKey.pem");
         RsaUtil.writePem(rsa.getPrivateKey(), "target/privateKey.pem");
+    }
+
+    @Test
+    public void test_rsa() {
+        KeyPair keyPair = generateKeyPair("RSA");
+        PrivateKey privateKey = keyPair.getPrivate();
+        PublicKey publicKey = keyPair.getPublic();
+
+        RSA rsa = SecureUtil.rsa(privateKey.getEncoded(), publicKey.getEncoded());
+        String password = "123456";
+        byte[] passwordBytes = StrUtil.bytes(password, CharsetUtil.CHARSET_UTF_8);
+
+        //公钥加密，私钥解密
+        {
+            byte[] encrypt = rsa.encrypt(passwordBytes, KeyType.PublicKey);
+            byte[] decrypt = rsa.decrypt(encrypt, KeyType.PrivateKey);
+            Assertions.assertArrayEquals(passwordBytes, decrypt);
+        }
+
+        // 私钥加密，公钥解密
+        {
+            byte[] encrypt = rsa.encrypt(passwordBytes, KeyType.PrivateKey);
+            byte[] decrypt = rsa.decrypt(encrypt, KeyType.PublicKey);
+            Assertions.assertArrayEquals(passwordBytes, decrypt);
+        }
     }
 }
