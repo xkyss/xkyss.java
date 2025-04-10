@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.xkyss</groupId>
+        <artifactId>xkyss-test</artifactId>
+        <version>2024.03.20</version>
+    </parent>
+
+    <artifactId>xkyss-test-easy-query</artifactId>
+    <name>xkyss-test :: Easy-Query</name>
+
+    <properties>
+        <easy-query.version>2.4.14</easy-query.version>
+        <hikari.version>3.3.1</hikari.version>
+        <mysql.version>9.2.0</mysql.version>
+        <lombok.version>1.18.36</lombok.version>
+    </properties>
+
+    <dependencies>
+        <!-- 按需引入eq的数据库方言支持依赖 -->
+        <dependency>
+            <groupId>com.easy-query</groupId>
+            <artifactId>sql-mysql</artifactId>
+            <version>${easy-query.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.easy-query</groupId>
+            <artifactId>sql-api4j</artifactId>
+            <version>${easy-query.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>

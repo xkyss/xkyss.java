@@ -17,6 +17,7 @@
         <module>xkyss-test-redis</module>
         <module>xkyss-test-cdc</module>
         <module>xkyss-test-grpc</module>
+        <module>xkyss-test-easy-query</module>
     </modules>
 
     <properties>
