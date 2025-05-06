@@ -1,19 +1,22 @@
 package com.xkyss.vertx;
 
+import com.xkyss.vertx.vo.AjaxResult;
+import com.xkyss.vertx.vo.CacheKey;
+import com.xkyss.vertx.vo.CacheWithManagerBatchPatchReq;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
-import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.client.HttpResponse;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.codec.BodyCodec;
+import io.vertx.junit5.VertxTestContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import javax.xml.ws.Response;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -73,6 +76,57 @@ public class RestClientTest {
         }
 
         Future.all(futures).toCompletionStage().toCompletableFuture().get(5000, TimeUnit.MILLISECONDS);
+    }
+
+    @Test
+    public void test_03() throws ExecutionException, InterruptedException, TimeoutException {
+        VertxTestContext testContext = new VertxTestContext();
+        Vertx vertx = Vertx.vertx();
+        long t1 = System.currentTimeMillis();
+
+        CacheWithManagerBatchPatchReq req = new CacheWithManagerBatchPatchReq();
+        req.setExpire(360L);
+        req.setKeys(Arrays.asList(new CacheKey("default", "AR_com.thzt.mlcache.ar.po.Product", "95840197-7750-43ee-bca9-192413b78012")));
+        WebClient.create(vertx)
+            .post(8084, "192.168.1.38", "/sdk/cache/with-manager/batchExpire")
+            .as(BodyCodec.json(AjaxResult.class))
+            .sendJson(req)
+            .onComplete(v -> {
+                System.out.println(v.result().body());
+                long t2 = System.currentTimeMillis();
+                System.out.println("耗时(ms):" + (t2 - t1));
+                testContext.completeNow();
+            });
+
+        testContext.awaitCompletion(5, TimeUnit.SECONDS);
+    }
+
+    @Test
+    public void test_03_sync() throws ExecutionException, InterruptedException, TimeoutException {
+        Vertx vertx = Vertx.vertx();
+        long t1 = System.currentTimeMillis();
+
+        try {
+            CacheWithManagerBatchPatchReq req = new CacheWithManagerBatchPatchReq();
+            req.setExpire(360L);
+            req.setKeys(Arrays.asList(new CacheKey("default", "AR_com.thzt.mlcache.ar.po.Product", "95840197-7750-43ee-bca9-192413b78012")));
+            AjaxResult body = WebClient.create(vertx)
+                .post(8084, "192.168.1.38", "/sdk/cache/with-manager/batchExpire")
+                .as(BodyCodec.json(AjaxResult.class))
+                .sendJson(req)
+                .toCompletionStage()
+                .toCompletableFuture()
+                .get(5, TimeUnit.SECONDS)
+                .body();
+
+            System.out.println(body);
+            long t2 = System.currentTimeMillis();
+            System.out.println("耗时(ms):" + (t2 - t1));
+
+        } catch (Exception e) {
+            System.out.println("修改失败");
+        }
+
     }
 
     static class Server {
