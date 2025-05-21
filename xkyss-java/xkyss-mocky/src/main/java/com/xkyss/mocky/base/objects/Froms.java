@@ -41,9 +41,10 @@ public class Froms {
     public <T> MockUnit<T> fromKeys(Map<T, ?> map) {
         notEmpty(map, INPUT_PARAMETER_NOT_EMPTY_OR_NULL, "map");
 
+        //noinspection unchecked
+        T[] keys = (T[]) map.keySet().toArray();
+
         return () -> {
-            //noinspection unchecked
-            T[] keys = (T[]) map.keySet().toArray();
             int idx = random.nextInt(keys.length);
             return keys[idx];
         };
@@ -51,9 +52,10 @@ public class Froms {
 
     public <T> MockUnit<T> fromValues(Map<?, T> map) {
         notEmpty(map, INPUT_PARAMETER_NOT_EMPTY_OR_NULL, "map");
+        //noinspection unchecked
+        T[] values = (T[]) map.values().toArray();
+
         return () -> {
-            //noinspection unchecked
-            T[] values = (T[]) map.values().toArray();
             int idx = random.nextInt(values.length);
             return values[idx];
         };

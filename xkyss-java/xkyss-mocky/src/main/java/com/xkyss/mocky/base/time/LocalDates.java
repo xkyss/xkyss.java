@@ -47,8 +47,9 @@ public class LocalDates implements MockUnit<LocalDate> {
 
     public MockUnit<LocalDate> thisYear() {
         return () -> {
-            int year = now().getYear();
-            int maxDays = now().lengthOfYear() + 1;
+            LocalDate now = now();
+            int year = now.getYear();
+            int maxDays = now.lengthOfYear() + 1;
             int randDay = ints.range(1, maxDays).get();
             return ofYearDay(year, randDay);
         };
@@ -56,9 +57,10 @@ public class LocalDates implements MockUnit<LocalDate> {
 
     public MockUnit<LocalDate> thisMonth() {
         return () -> {
-            int year = now().getYear();
-            Month month = now().getMonth();
-            int lM = now().lengthOfMonth() + 1;
+            LocalDate now = now();
+            int year = now.getYear();
+            Month month = now.getMonth();
+            int lM = now.lengthOfMonth() + 1;
             int randDay = ints.range(1, lM).get();
             return of(year, month, randDay);
         };
@@ -70,12 +72,13 @@ public class LocalDates implements MockUnit<LocalDate> {
             MAX_DATE_NOT_BIGGER_THAN,
             "max", maxDate,
             "date", MAX.minusDays(1));
-        isTrue(maxDate.plusDays(1).isAfter(now()),
+        LocalDate now = now();
+        isTrue(maxDate.plusDays(1).isAfter(now),
             MAX_DATE_DIFFERENT_THAN_NOW,
             "max", maxDate,
-            "now", now());
+            "now", now);
 
-        return between(now().plusDays(1), maxDate.plusDays(1));
+        return between(now.plusDays(1), maxDate.plusDays(1));
     }
 
     public MockUnit<LocalDate> past(LocalDate minDate) {
@@ -84,11 +87,12 @@ public class LocalDates implements MockUnit<LocalDate> {
             MIN_DATE_BIGGER_THAN,
             "min", minDate,
             "date", MIN);
-        isTrue(minDate.minusDays(1).isBefore(now()),
+        LocalDate now = now();
+        isTrue(minDate.minusDays(1).isBefore(now),
             MIN_DATE_DIFFERENT_THAN_NOW,
             "min", minDate,
-            "now", now());
+            "now", now);
 
-        return between(minDate, now());
+        return between(minDate, now);
     }
 }
