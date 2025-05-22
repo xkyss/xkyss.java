@@ -2,6 +2,7 @@ package com.xkyss.mocky.base.seq;
 
 import com.xkyss.mocky.abstraction.MockUnit;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.Supplier;
 
@@ -22,6 +23,16 @@ public class Seq<T> implements MockUnit<T> {
         this.iterable = iterable;
         this.iterator = iterable.iterator();
         isTrue(iterator.hasNext(), IMPOSSIBLE_TO_SEQ_OVER_EMPTY_COLLECTION);
+    }
+
+    public static <T> Seq<T> fromIterable(Iterable<T> iterable) {
+        notNull(iterable, "iterable");
+        return new Seq<>(iterable);
+    }
+
+    public static <T> Seq<T> fromArray(T[] array) {
+        notNull(array, "array");
+        return new Seq<>(Arrays.asList(array));
     }
 
     @Override

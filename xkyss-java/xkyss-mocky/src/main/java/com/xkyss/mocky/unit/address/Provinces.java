@@ -1,6 +1,5 @@
 package com.xkyss.mocky.unit.address;
 
-import com.xkyss.mocky.abstraction.ACachedDictUnit;
 import com.xkyss.mocky.abstraction.ACsvDictUnit;
 import com.xkyss.mocky.model.Province;
 import org.apache.commons.csv.CSVRecord;

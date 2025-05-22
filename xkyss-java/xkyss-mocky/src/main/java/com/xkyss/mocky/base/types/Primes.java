@@ -5,7 +5,7 @@ import com.xkyss.mocky.base.objects.Froms;
 
 import static com.xkyss.mocky.contant.Alphabets.SMALL_PRIMES;
 
-class Primes implements MockUnit<Integer>{
+public class Primes implements MockUnit<Integer>{
 
     private final Froms froms;
 
