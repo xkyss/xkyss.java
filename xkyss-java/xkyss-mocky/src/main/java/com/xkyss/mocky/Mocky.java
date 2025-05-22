@@ -5,10 +5,8 @@ import com.xkyss.mocky.base.objects.Froms;
 import com.xkyss.mocky.base.seq.IntSeq;
 import com.xkyss.mocky.base.seq.LongSeq;
 import com.xkyss.mocky.base.seq.Seq;
-import com.xkyss.mocky.base.text.Dicts;
-import com.xkyss.mocky.base.text.Hashes;
-import com.xkyss.mocky.base.text.Regex;
-import com.xkyss.mocky.base.text.Strings;
+import com.xkyss.mocky.base.text.*;
+import com.xkyss.mocky.base.time.LocalDateTimes;
 import com.xkyss.mocky.base.time.LocalDates;
 import com.xkyss.mocky.base.time.LocalTimes;
 import com.xkyss.mocky.base.types.*;
@@ -33,9 +31,11 @@ public class Mocky {
     private final Strings strings;
     private final Dicts dicts;
     private final Hashes hashes;
+    private final Ids ids;
 
     private final LocalDates localDates;
     private final LocalTimes localTimes;
+    private final LocalDateTimes localDateTimes;
 
     public Mocky() {
         this(ThreadLocalRandom.current());
@@ -57,9 +57,11 @@ public class Mocky {
         this.strings = new Strings(random);
         this.dicts = new Dicts(random);
         this.hashes = new Hashes(random, strings);
+        this.ids = new Ids();
 
         this.localDates = new LocalDates(ints, longs);
-        this.localTimes = new LocalTimes();
+        this.localTimes = new LocalTimes(random);
+        this.localDateTimes = new LocalDateTimes(localDates, localTimes);
     }
 
     public Froms froms() {
@@ -126,6 +128,10 @@ public class Mocky {
         return hashes;
     }
 
+    public Ids ids() {
+        return ids;
+    }
+
     public Regex regex(String exp) {
         return new Regex(exp);
     }
@@ -136,5 +142,9 @@ public class Mocky {
 
     public LocalTimes localTimes() {
         return localTimes;
+    }
+
+    public LocalDateTimes localDateTimes() {
+        return localDateTimes;
     }
 }

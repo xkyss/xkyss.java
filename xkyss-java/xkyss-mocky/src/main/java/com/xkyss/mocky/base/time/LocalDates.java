@@ -15,6 +15,7 @@ import static org.apache.commons.lang3.Validate.isTrue;
 public class LocalDates implements MockUnit<LocalDate> {
 
     public static final LocalDate EPOCH_START = ofEpochDay(0);
+
     private final Ints ints;
     private final Longs longs;
 
