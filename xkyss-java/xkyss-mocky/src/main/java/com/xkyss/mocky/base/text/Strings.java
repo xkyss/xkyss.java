@@ -17,32 +17,38 @@ import static org.apache.commons.lang3.Validate.notNull;
 public class Strings implements MockUnit<String> {
 
     private final Random random;
-    private int size = 64;
-    private MockUnit<Integer> sizeUnit;
+    private final MockUnit<Integer> sizeUnit;
 
     public Strings(Random random) {
+        this(random, () -> random.nextInt(1));
+    }
+
+    protected Strings(Random random, int size) {
+        this(random, () -> size);
+    }
+
+    protected Strings(Random random, MockUnit<Integer> sizeUnit) {
         this.random = random;
+        this.sizeUnit = sizeUnit;
     }
 
     @Override
     public String get() {
-        return random(getSize(), 0, 0, true, true, null, random);
+        return random(sizeUnit.get(), 0, 0, true, true, null, random);
     }
 
     protected int getSize() {
-        return sizeUnit != null ? sizeUnit.get() : size;
+        return sizeUnit.get();
     }
 
     public Strings size(int size) {
         isTrue(size>0, SIZE_BIGGER_THAN_ZERO_STRICT);
-        this.size = size;
-        return this;
+        return new Strings(random, size);
     }
 
     public Strings size(MockUnit<Integer> sizeUnit) {
         notNull(sizeUnit, INPUT_PARAMETER_NOT_NULL, "sizeUnit");
-        this.sizeUnit = sizeUnit;
-        return this;
+        return new Strings(random, sizeUnit);
     }
 
     public MockUnit<String> numbers() {
