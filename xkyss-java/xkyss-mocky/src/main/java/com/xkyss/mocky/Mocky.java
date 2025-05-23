@@ -28,7 +28,6 @@ public class Mocky {
     private final Floats floats;
     private final Primes primes;
 
-    private final Strings strings;
     private final Dicts dicts;
     private final Hashes hashes;
     private final Ids ids;
@@ -54,9 +53,8 @@ public class Mocky {
         this.chars = new Chars(random, froms);
         this.primes = new Primes(froms);
 
-        this.strings = new Strings(random);
         this.dicts = new Dicts(random);
-        this.hashes = new Hashes(random, strings);
+        this.hashes = new Hashes(random, new Strings(random));
         this.ids = new Ids();
 
         this.localDates = new LocalDates(ints, longs);
@@ -117,7 +115,7 @@ public class Mocky {
     }
 
     public Strings strings() {
-        return strings;
+        return new Strings(random);
     }
 
     public Dicts dicts() {

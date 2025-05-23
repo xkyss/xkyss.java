@@ -14,26 +14,49 @@ public class SqlMockTest {
     public void test_gen_product() {
         Mocky mocky = new Mocky();
         Filler<Product> builder = mocky.filler(Product::new)
+            // 主键
             .setter(Product::setId, mocky.ids().uuid())
-            .setter(Product::setName, mocky.strings())
-            .setter(Product::setType, mocky.strings())
+            // 产品品牌
             .setter(Product::setBrand, mocky.froms().from(Arrays.asList("华为", "美的", "小米")))
-            .setter(Product::setPrice, () -> BigDecimal.valueOf(mocky.doubles().range(1, 1000).get()))
+            // 产品类型
+            .setter(Product::setType, mocky.strings())
+            // 产品名称
+            .setter(Product::setName, p ->
+                p.getBrand() + mocky.strings().size(3).letters().get().toUpperCase() +
+                "-" + mocky.strings().size(10).alphaNumeric().get().toUpperCase() + p.getType())
+            // 产品价格
+            .setter(Product::setPrice, () -> BigDecimal.valueOf(mocky.doubles().range(1, 10000).get()))
+            // 产品数量
             .setter(Product::setStock, mocky.longs().range(1, 1000))
-            .setter(Product::setPriceSpike, () -> BigDecimal.valueOf(mocky.doubles().range(1, 1000).get()))
+            // 秒杀价
+            .setter(Product::setPriceSpike, () -> BigDecimal.valueOf(mocky.doubles().range(1, 8000).get()))
+            // 秒杀时间
             .setter(Product::setSpikeTime, mocky.localDateTimes())
+            // 创建时间
             .setter(Product::setCreateTime, mocky.localDateTimes())
+            // 更新时间
             .setter(Product::setUpdateTime, mocky.localDateTimes())
+            // 长
             .setter(Product::setRemark1, mocky.strings())
+            // 宽
             .setter(Product::setRemark2, mocky.strings())
+            // 高
             .setter(Product::setRemark3, mocky.strings())
+            // 颜色
             .setter(Product::setRemark4, mocky.strings())
+            // 重量
             .setter(Product::setRemark5, mocky.strings())
+            // 描述
             .setter(Product::setRemark6, mocky.strings())
+            // 折扣
             .setter(Product::setRemark7, mocky.strings())
+            // 最低价
             .setter(Product::setRemark8, mocky.strings())
+            // 最高价
             .setter(Product::setRemark9, mocky.strings())
+            // 购买数
             .setter(Product::setRemark10, mocky.strings())
+            // 退货率
             .setter(Product::setRemark11, mocky.strings());
 
         Product product = builder.get();
@@ -252,6 +275,36 @@ public class SqlMockTest {
 
         public void setTotalRows(Long totalRows) {
             this.totalRows = totalRows;
+        }
+
+        @Override
+        public String toString() {
+            return "Product{" +
+                    "id='" + id + '\'' +
+                    ", name='" + name + '\'' +
+                    ", type='" + type + '\'' +
+                    ", brand='" + brand + '\'' +
+                    ", price=" + price +
+                    ", stock=" + stock +
+                    ", priceSpike=" + priceSpike +
+                    ", spikeTime=" + spikeTime +
+                    ", createTime=" + createTime +
+                    ", updateTime=" + updateTime +
+                    ", remark1='" + remark1 + '\'' +
+                    ", remark2='" + remark2 + '\'' +
+                    ", remark3='" + remark3 + '\'' +
+                    ", remark4='" + remark4 + '\'' +
+                    ", remark5='" + remark5 + '\'' +
+                    ", remark6='" + remark6 + '\'' +
+                    ", remark7='" + remark7 + '\'' +
+                    ", remark8='" + remark8 + '\'' +
+                    ", remark9='" + remark9 + '\'' +
+                    ", remark10='" + remark10 + '\'' +
+                    ", remark11='" + remark11 + '\'' +
+                    ", totalRows=" + totalRows +
+                    '}';
+
+
         }
     }
 }

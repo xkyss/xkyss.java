@@ -1,10 +1,15 @@
 package com.xkyss.mocky.base.text;
 
 import com.xkyss.mocky.abstraction.MockUnit;
+import com.xkyss.mocky.base.objects.Froms;
 
 import java.util.Random;
+import java.util.stream.Collectors;
 
+import static com.xkyss.mocky.contant.Alphabets.HEXA_STR;
+import static com.xkyss.mocky.contant.Alphabets.SPECIAL_CHARACTERS_STR;
 import static com.xkyss.mocky.contant.MockConsts.INPUT_PARAMETER_NOT_NULL;
+import static com.xkyss.mocky.contant.MockConsts.SIZE_BIGGER_THAN_ZERO_STRICT;
 import static org.apache.commons.lang3.RandomStringUtils.random;
 import static org.apache.commons.lang3.Validate.isTrue;
 import static org.apache.commons.lang3.Validate.notNull;
@@ -12,6 +17,8 @@ import static org.apache.commons.lang3.Validate.notNull;
 public class Strings implements MockUnit<String> {
 
     private final Random random;
+    private int size = 64;
+    private MockUnit<Integer> sizeUnit;
 
     public Strings(Random random) {
         this.random = random;
@@ -19,16 +26,49 @@ public class Strings implements MockUnit<String> {
 
     @Override
     public String get() {
-        return random(64, 0, 0, true, true, null, random);
+        return random(getSize(), 0, 0, true, true, null, random);
     }
 
-    public MockUnit<String> size(int size) {
-        isTrue(size>0, "The size needs to be bigger than 0 (>).");
-        return () -> random(size, 0, 0, true, true, null, random);
+    protected int getSize() {
+        return sizeUnit != null ? sizeUnit.get() : size;
     }
 
-    public MockUnit<String> size(MockUnit<Integer> sizeUnit) {
+    public Strings size(int size) {
+        isTrue(size>0, SIZE_BIGGER_THAN_ZERO_STRICT);
+        this.size = size;
+        return this;
+    }
+
+    public Strings size(MockUnit<Integer> sizeUnit) {
         notNull(sizeUnit, INPUT_PARAMETER_NOT_NULL, "sizeUnit");
-        return () -> random(sizeUnit.get(), 0, 0, true, true, null, random);
+        this.sizeUnit = sizeUnit;
+        return this;
+    }
+
+    public MockUnit<String> numbers() {
+        return () -> random(getSize(), 0, 0, false, true, null, random);
+    }
+
+    public MockUnit<String> letters() {
+        return () -> random(getSize(), 0, 0, true, false, null, random);
+    }
+
+
+    public MockUnit<String> alphaNumeric() {
+        return () -> random(getSize(), 0, 0, true, true, null, random);
+    }
+
+    public MockUnit<String> hex() {
+        return () -> new Froms(random).from(HEXA_STR)
+            .stream()
+            .limit(getSize())
+            .collect(Collectors.joining());
+    }
+
+    public MockUnit<String> specialChars() {
+        return () -> new Froms(random).from(SPECIAL_CHARACTERS_STR)
+            .stream()
+            .limit(getSize())
+            .collect(Collectors.joining());
     }
 }

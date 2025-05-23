@@ -4,6 +4,7 @@ import java.util.*;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import static com.xkyss.mocky.contant.MockConsts.SIZE_BIGGER_THAN_ZERO;
 import static java.util.stream.IntStream.range;
@@ -40,5 +41,9 @@ public interface MockUnit<T> extends Supplier<T> {
         notNull(result, "listSupplier");
         range(0, size).forEach(i -> result.add(get()));
         return result;
+    }
+
+    default Stream<T> stream() {
+        return Stream.generate(this);
     }
 }

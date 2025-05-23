@@ -5,7 +5,6 @@ import com.xkyss.mocky.abstraction.MockUnit;
 
 import java.util.Random;
 
-import static com.xkyss.core.util.Validate.isFinite;
 import static com.xkyss.mocky.contant.MockConsts.*;
 import static org.apache.commons.lang3.Validate.*;
 

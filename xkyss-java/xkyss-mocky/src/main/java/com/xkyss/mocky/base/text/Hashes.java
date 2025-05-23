@@ -14,51 +14,46 @@ public class Hashes implements MockUnit<String> {
 
     private final Strings strings;
     private final Random random;
+    private final List<MockUnit<String>> suppliers;
 
     public Hashes(Random random, Strings strings) {
         this.random = random;
         this.strings = strings;
+        this.suppliers = Arrays.asList(md2(), md5(), sha1(), sha256(), sha384(), sha512());
     }
+
 
     @Override
     public String get() {
-        List<MockUnit<String>> functions = Arrays.asList(
-            this::md2,
-            this::md5,
-            this::sha1,
-            this::sha256,
-            this::sha384,
-            this::sha512
-        );
-        int idx = random.nextInt(functions.size());
-        return functions.get(idx).get();
+        int idx = random.nextInt(suppliers.size());
+        return suppliers.get(idx).get();
     }
 
     private MockUnit<String> supplier(UnaryOperator<String> digester) {
         return strings.size(HASHED_STRING_SIZE).map(digester);
     }
 
-    public String md2() {
-        return supplier(DigestUtils::md2Hex).get();
+    public MockUnit<String> md2() {
+        return supplier(DigestUtils::md2Hex);
     }
 
-    public String md5() {
-        return supplier(DigestUtils::md5Hex).get();
+    public MockUnit<String> md5() {
+        return supplier(DigestUtils::md5Hex);
     }
 
-    public String sha1() {
-        return supplier(DigestUtils::sha1Hex).get();
+    public MockUnit<String> sha1() {
+        return supplier(DigestUtils::sha1Hex);
     }
 
-    public String sha256() {
-        return supplier(DigestUtils::sha256Hex).get();
+    public MockUnit<String> sha256() {
+        return supplier(DigestUtils::sha256Hex);
     }
 
-    public String sha384() {
-        return supplier(DigestUtils::sha384Hex).get();
+    public MockUnit<String> sha384() {
+        return supplier(DigestUtils::sha384Hex);
     }
 
-    public String sha512() {
-        return supplier(DigestUtils::sha512Hex).get();
+    public MockUnit<String> sha512() {
+        return supplier(DigestUtils::sha512Hex);
     }
 }

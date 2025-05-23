@@ -21,42 +21,42 @@ public class HashesTest {
     @Test
     public void test_md2() {
         for (int i = 0; i < TEST_COUNT; i++) {
-            Assertions.assertTrue(hashes.md2().matches("^[0-9a-f]+$"));
+            Assertions.assertTrue(hashes.md2().get().matches("^[0-9a-f]+$"));
         }
     }
 
     @Test
     public void test_md5() {
         for (int i = 0; i < TEST_COUNT; i++) {
-            Assertions.assertTrue(hashes.md5().matches("^[0-9a-f]+$"));
+            Assertions.assertTrue(hashes.md5().get().matches("^[0-9a-f]+$"));
         }
     }
 
     @Test
     public void test_sha1() {
         for (int i = 0; i < TEST_COUNT; i++) {
-            Assertions.assertTrue(hashes.sha1().matches("^[0-9a-f]+$"));
+            Assertions.assertTrue(hashes.sha1().get().matches("^[0-9a-f]+$"));
         }
     }
 
     @Test
     public void test_sha256() {
         for (int i = 0; i < TEST_COUNT; i++) {
-            Assertions.assertTrue(hashes.sha256().matches("^[0-9a-f]+$"));
+            Assertions.assertTrue(hashes.sha256().get().matches("^[0-9a-f]+$"));
         }
     }
 
     @Test
     public void test_sha384() {
         for (int i = 0; i < TEST_COUNT; i++) {
-            Assertions.assertTrue(hashes.sha384().matches("^[0-9a-f]+$"));
+            Assertions.assertTrue(hashes.sha384().get().matches("^[0-9a-f]+$"));
         }
     }
 
     @Test
     public void test_sha512() {
         for (int i = 0; i < TEST_COUNT; i++) {
-            Assertions.assertTrue(hashes.sha512().matches("^[0-9a-f]+$"));
+            Assertions.assertTrue(hashes.sha512().get().matches("^[0-9a-f]+$"));
         }
     }
 }
