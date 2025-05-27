@@ -20,7 +20,7 @@ public class Strings implements MockUnit<String> {
     private final MockUnit<Integer> sizeUnit;
 
     public Strings(Random random) {
-        this(random, () -> random.nextInt(1));
+        this(random, () -> random.nextInt(64));
     }
 
     protected Strings(Random random, int size) {
