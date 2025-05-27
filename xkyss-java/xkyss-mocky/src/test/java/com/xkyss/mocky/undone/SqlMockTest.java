@@ -1,66 +1,83 @@
 package com.xkyss.mocky.undone;
 
 import com.xkyss.mocky.Mocky;
+import com.xkyss.mocky.abstraction.MockUnit;
 import com.xkyss.mocky.base.objects.Filler;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class SqlMockTest {
 
     @Test
     public void test_gen_product() {
-        Mocky mocky = new Mocky();
-        Filler<Product> builder = mocky.filler(Product::new)
-            // 主键
-            .setter(Product::setId, mocky.ids().uuid())
-            // 产品品牌
-            .setter(Product::setBrand, mocky.froms().from(Arrays.asList("华为", "美的", "小米")))
-            // 产品类型
-            .setter(Product::setType, mocky.strings())
-            // 产品名称
-            .setter(Product::setName, p ->
-                p.getBrand() + mocky.strings().size(3).letters().get().toUpperCase() +
-                "-" + mocky.strings().size(10).alphaNumeric().get().toUpperCase() + p.getType())
-            // 产品价格
-            .setter(Product::setPrice, () -> BigDecimal.valueOf(mocky.doubles().range(1, 10000).get()))
-            // 产品数量
-            .setter(Product::setStock, mocky.longs().range(1, 1000))
-            // 秒杀价
-            .setter(Product::setPriceSpike, () -> BigDecimal.valueOf(mocky.doubles().range(1, 8000).get()))
-            // 秒杀时间
-            .setter(Product::setSpikeTime, mocky.localDateTimes())
-            // 创建时间
-            .setter(Product::setCreateTime, mocky.localDateTimes())
-            // 更新时间
-            .setter(Product::setUpdateTime, mocky.localDateTimes())
-            // 长
-            .setter(Product::setRemark1, mocky.strings())
-            // 宽
-            .setter(Product::setRemark2, mocky.strings())
-            // 高
-            .setter(Product::setRemark3, mocky.strings())
-            // 颜色
-            .setter(Product::setRemark4, mocky.strings())
-            // 重量
-            .setter(Product::setRemark5, mocky.strings())
-            // 描述
-            .setter(Product::setRemark6, mocky.strings())
-            // 折扣
-            .setter(Product::setRemark7, mocky.strings())
-            // 最低价
-            .setter(Product::setRemark8, mocky.strings())
-            // 最高价
-            .setter(Product::setRemark9, mocky.strings())
-            // 购买数
-            .setter(Product::setRemark10, mocky.strings())
-            // 退货率
-            .setter(Product::setRemark11, mocky.strings());
-
-        Product product = builder.get();
+        Products products = new Products(new Mocky());
+        Product product = products.get();
         System.out.println(product);
+    }
+
+    public class Products implements MockUnit<Product> {
+
+        private final Mocky mocky;
+
+        public Products(Mocky mocky) {
+            this.mocky = mocky;
+        }
+
+        @Override
+        public Product get() {
+            Product p = new Product();
+            // 主键
+            p.setId(mocky.ids().uuid().get());
+            // 产品品牌
+            p.setBrand(mocky.froms().from(Arrays.asList("华为", "美的", "小米")).get());
+            // 产品类型
+            p.setType(mocky.froms().from(Arrays.asList("电视", "冰箱", "空调", "洗衣机", "智能手环")).get());
+            // 产品名称
+            p.setName(p.getBrand() + mocky.strings().size(3).letters().get().toUpperCase() +
+                "-" + mocky.strings().size(10).alphaNumeric().get().toUpperCase() +
+                "-" +p.getType());
+            // 产品价格
+            p.setPrice(BigDecimal.valueOf(mocky.doubles().range(1, 10000).get()));
+            // 产品数量
+            p.setStock(mocky.longs().range(1, 1000).get());
+            // 秒杀价
+            p.setPriceSpike(BigDecimal.valueOf(mocky.doubles().range(1, 8000).get()));
+            // 秒杀时间
+            p.setSpikeTime(mocky.localDateTimes().get());
+            // 创建时间
+            p.setCreateTime(mocky.localDateTimes().get());
+            // 更新时间
+            p.setUpdateTime(mocky.localDateTimes().get());
+            // 长
+            p.setRemark1(String.format("%dmm", mocky.ints().bound(100).get()));
+            // 宽
+            p.setRemark2(String.format("%dmm", mocky.ints().bound(100).get()));
+            // 高
+            p.setRemark3(String.format("%.2fmm", mocky.doubles().bound(60).get()));
+            // 颜色
+            p.setRemark4(String.join("、",
+                mocky.froms().from(Arrays.asList("红色", "橙色", "黄色", "绿色", "青色", "蓝色", "紫色"))
+                    .list(mocky.ints().bound(4))));
+            // 重量
+            p.setRemark5(String.format(mocky.froms().from(Arrays.asList("%.2fg", "%.2fkg")).get(), mocky.doubles().bound(100).get()));
+            // 描述
+            p.setRemark6(mocky.strings().get());
+            // 折扣
+            p.setRemark7(String.format("%.1f折", mocky.doubles().bound(10).get()));
+            // 最低价
+            p.setRemark8(String.format("%d元", mocky.ints().bound(1000).get()));
+            // 最高价
+            p.setRemark9(String.format("%d元", mocky.ints().range(1000, 5000).get()));
+            // 购买数
+            p.setRemark10(String.format("%d", mocky.ints().bound(10000).get()));
+            // 退货率
+            p.setRemark11(String.format("%.1f%%", mocky.doubles().bound(10).get()));
+            return p;
+        }
     }
 
     // @Data
