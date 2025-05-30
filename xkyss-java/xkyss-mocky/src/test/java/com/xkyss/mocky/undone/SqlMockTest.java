@@ -7,7 +7,9 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class SqlMockTest {
@@ -16,8 +18,45 @@ public class SqlMockTest {
     public void test_gen_product() {
         Products products = new Products(new Mocky());
         Product product = products.get();
-        System.out.println(product);
+        // System.out.println(product);
+        System.out.println(toSql(product));
     }
+
+    @Test
+    public void test_get_product_list() {
+        Products products = new Products(new Mocky());
+        List<Product> list = products.list(50);
+
+        list.forEach(p -> System.out.println(toSql(p)));
+    }
+
+    public static String toSql(Product p) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return "insert into MLCACHE.\"product\" (id, name, \"type\", brand, price, stock, price_spike, spike_time, create_time, update_time, remark1, remark2, remark3, remark4, remark5, remark6, remark7, remark8, remark9, remark10, remark11) values (" +
+            "'" + p.getId() + "', " +
+            "'" + p.getName() + "', " +
+            "'" + p.getType() + "', " +
+            "'" + p.getBrand() + "', " +
+            "'" + p.getPrice() + "', " +
+            "'" + p.getStock() + "', " +
+            "'" + p.getPriceSpike() + "', " +
+            "'" + p.getSpikeTime().format(formatter) + "', " +
+            "'" + p.getCreateTime().format(formatter) + "', " +
+            "'" + p.getUpdateTime().format(formatter) + "', " +
+            "'" + p.getRemark1() + "', " +
+            "'" + p.getRemark2() + "'," +
+            "'" + p.getRemark3() + "', " +
+            "'" + p.getRemark4() + "', " +
+            "'" + p.getRemark5() + "', " +
+            "'" + p.getRemark6() + "', " +
+            "'" + p.getRemark7() + "', " +
+            "'" + p.getRemark8() + "', " +
+            "'" + p.getRemark9() + "', " +
+            "'" + p.getRemark10() + "', " +
+            "'" + p.getRemark11() + "'" +
+            ");";
+    }
+
 
     public class Products implements MockUnit<Product> {
 
