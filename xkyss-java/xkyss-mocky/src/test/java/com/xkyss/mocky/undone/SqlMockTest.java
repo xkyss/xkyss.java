@@ -2,7 +2,6 @@ package com.xkyss.mocky.undone;
 
 import com.xkyss.mocky.Mocky;
 import com.xkyss.mocky.abstraction.MockUnit;
-import com.xkyss.mocky.base.objects.Filler;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -10,7 +9,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class SqlMockTest {
 
@@ -19,7 +17,7 @@ public class SqlMockTest {
         Products products = new Products(new Mocky());
         Product product = products.get();
         // System.out.println(product);
-        System.out.println(toSql(product));
+        System.out.println(toSqlInsert(product));
     }
 
     @Test
@@ -27,10 +25,18 @@ public class SqlMockTest {
         Products products = new Products(new Mocky());
         List<Product> list = products.list(50);
 
-        list.forEach(p -> System.out.println(toSql(p)));
+        list.forEach(p -> System.out.println(toSqlInsert(p)));
     }
 
-    public static String toSql(Product p) {
+    @Test
+    public void test_update_product_list() {
+        Products products = new Products(new Mocky());
+        List<Product> list = products.list(20);
+
+        list.forEach(p -> System.out.println(toSqlUpdate(p)));
+    }
+
+    public static String toSqlInsert(Product p) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         return "insert into MLCACHE.\"product\" (id, name, \"type\", brand, price, stock, price_spike, spike_time, create_time, update_time, remark1, remark2, remark3, remark4, remark5, remark6, remark7, remark8, remark9, remark10, remark11) values (" +
             "'" + p.getId() + "', " +
@@ -56,7 +62,32 @@ public class SqlMockTest {
             "'" + p.getRemark11() + "'" +
             ");";
     }
-
+    
+    public static String toSqlUpdate(Product p) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return "update MLCACHE.\"product\"" +
+            "set " +
+            " name=" + "'" + p.getName() + "'," +
+            " type=" + "'" + p.getType() + "'," +
+            " brand=" + "'" + p.getBrand() + "'," +
+            " price=" + "'" + p.getPrice() + "'," +
+            " stock=" + "'" + p.getStock() + "'," +
+            " price_spike=" + "'" + p.getPriceSpike() + "'," +
+            " spike_time=" + "'" + p.getSpikeTime().format(formatter) + "'," +
+            " update_time=" + "'" + p.getUpdateTime().format(formatter) + "'," +
+            " remark1=" + "'" + p.getRemark1() + "'," +
+            " remark2=" + "'" + p.getRemark2() + "'," +
+            " remark3=" + "'" + p.getRemark3() + "'," +
+            " remark4=" + "'" + p.getRemark4() + "'," +
+            " remark5=" + "'" + p.getRemark5() + "'," +
+            " remark6=" + "'" + p.getRemark6() + "'," +
+            " remark7=" + "'" + p.getRemark7() + "'," +
+            " remark8=" + "'" + p.getRemark8() + "'," +
+            " remark9=" + "'" + p.getRemark9() + "'," +
+            " remark10=" + "'" + p.getRemark10() + "'," +
+            " remark11=" + "'" + p.getRemark11() + "'" +
+            "where id= ;"; // 这里手动填
+    }
 
     public class Products implements MockUnit<Product> {
 
