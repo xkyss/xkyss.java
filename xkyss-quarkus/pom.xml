@@ -6,7 +6,7 @@
 
     <groupId>com.xkyss</groupId>
     <artifactId>xkyss-quarkus</artifactId>
-    <version>1.24.2</version>
+    <version>1.25.1</version>
     <packaging>pom</packaging>
     <name>Xkyss Quarkus</name>
 
@@ -43,8 +43,6 @@
     </modules>
 
     <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
         <maven.compiler.release>21</maven.compiler.release>
 
         <!-- quarkus extension -->
@@ -52,8 +50,8 @@
         <failsafe-plugin.version>${surefire-plugin.version}</failsafe-plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <quarkus.version>3.17.2</quarkus.version>
-        <surefire-plugin.version>3.5.0</surefire-plugin.version>
+        <quarkus.version>3.24.3</quarkus.version>
+        <surefire-plugin.version>3.5.2</surefire-plugin.version>
 
         <!-- other -->
         <jandex.version>3.1.1</jandex.version>

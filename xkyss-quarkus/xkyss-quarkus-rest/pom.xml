@@ -9,16 +9,13 @@
     <parent>
         <groupId>com.xkyss</groupId>
         <artifactId>xkyss-quarkus</artifactId>
-        <version>1.24.2</version>
+        <version>1.25.1</version>
     </parent>
 
     <modules>
         <module>deployment</module>
         <module>runtime</module>
     </modules>
-
-    <properties>
-    </properties>
 
     <dependencyManagement>
         <dependencies>

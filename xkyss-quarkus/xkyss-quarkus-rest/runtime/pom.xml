@@ -4,11 +4,10 @@
     <artifactId>xkyss-quarkus-rest</artifactId>
     <name>Xkyss Quarkus Rest :: Runtime</name>
 
-
     <parent>
         <groupId>com.xkyss</groupId>
         <artifactId>xkyss-quarkus-rest-parent</artifactId>
-        <version>1.24.2</version>
+        <version>1.25.1</version>
     </parent>
 
     <dependencies>
