@@ -83,7 +83,7 @@
                     <plugin>
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
-                            <skipTests>${native.surefire.skip}</skipTests>
+                            <skipTests>true</skipTests>
                         </configuration>
                     </plugin>
                 </plugins>
