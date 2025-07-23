@@ -1,3 +1,4 @@
+artifact: ${project.groupId}:${project.artifactId}:${project.version}
 name: Xkyss Rest
 description: Xkyss Rest
 metadata:
@@ -7,3 +8,5 @@ metadata:
   categories:
     - "xkyss"
   status: "stable"
+  config:
+    - "xkyss.rest.,xkyss.build.rest"
